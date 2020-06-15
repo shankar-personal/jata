@@ -1,0 +1,78 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta content="text/html; charset=ISO-8859-1"
+ http-equiv="content-type">
+  <title>Coherent Setter</title>
+</head>
+<body>
+<div style="text-align: center;"><big><big><big><big><span
+ style="font-weight: bold;">Coherent Setter</span></big></big></big></big><br>
+</div>
+<br>
+<h1><a class="mozTocH1" name="mozTocId669553"></a>Introduction:</h1>
+This pattern lets you set several fields in a single operation.<br>
+<br>
+<h1><a class="mozTocH1" name="mozTocId669553"></a>Coherent Setter:</h1>
+Consider the following class.<br>
+<pre>
+
+<font color="#2e8b57"><b>public</b></font> <font color="#2e8b57"><b>class</b></font> InvoiceMutable {
+
+        <font color="#2e8b57"><b>private</b></font> String productName;
+        <font
+ color="#2e8b57"><b>private</b></font> String model;
+        <font
+ color="#2e8b57"><b>private</b></font> String serialNumber;
+        <font
+ color="#2e8b57"><b>private</b></font> <font color="#2e8b57"><b>double</b></font> price;
+        <font
+ color="#2e8b57"><b>private</b></font> String vendor;
+<font color="#0000ff"></font>
+        <font color="#2e8b57"><b>public</b></font> InvoiceMutable() {
+        }
+
+}
+</pre>
+<br>
+The class has setters and getters for all the fields. If a user wants
+to set multiple properties, there are a few options.<br>
+<br>
+<span style="font-style: italic;">invoice.setPrice(100).setModel("Alpha");</span><br>
+<br>
+or<br>
+<br>
+<span style="font-style: italic;">invoice.setPriceAndModel(100,
+"Alpha");</span><br>
+<br>
+or <br>
+<br>
+<span style="font-style: italic;">invoice.setAll(null, "Alpha", null,
+100, null);</span><br>
+<br>
+<span style="font-style: italic;">invoice </span>is an instance of <span
+ style="font-style: italic;">InvoiceMutable</span>.<br>
+<br>
+In the fist instance the changes are not applied atomically, which
+could result in incoherent state. In the second case, one could
+synchronize the <span style="font-style: italic;">setPriceAndModel(..)</span>
+method. Unfortunately, the number of methods that need to be defined to
+deal with all the permutations of permitted coherent changes is high.
+In the third case, the readability is lost even though a single defined
+method suffices.<br>
+<br>
+An alternative is to use the coherent setter method pattern copied from
+the Builder pattern presented by Joshua Bloch.<br>
+<br>
+Once you implement this pattern, your call would be:<br>
+<br>
+<span style="font-style: italic;">invoice.setBegin().model("beta").price(100).setEnd();</span><br>
+<br>
+This would guarantee coherency semantics, provides a simple
+implentation to deal with all permutations and is readable.<br>
+<br>
+<br>
+<h1><a class="mozTocH1" name="mozTocId614843"></a></h1>
+<br>
+</body>
+</html>

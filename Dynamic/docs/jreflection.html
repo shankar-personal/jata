@@ -1,0 +1,187 @@
+Simplified Reflection
+1 Introduction:
+
+In this post, I describe a simpler reflection programming model.
+
+
+Instead of the following code:
+
+
+Long length = new Long(20);
+
+Long width = new Long(20);
+
+Long height = new Long(20);
+
+OrdinaryBox box = new OrdinaryBox();
+
+Class[] parameterTypes = new Class[] {Long.class, Long.class, Long.class};
+
+Method getVolumeMethod = OrdinaryBox.class.getMethod("getVolume", parameterTypes);
+
+Object[] arguments = new Object[]{length, width, height};
+
+long volume = (Long) getVolumeMethod.invoke(box,arguments);
+
+
+You can write the following code:
+
+
+Long length = new Long(20);
+
+Long width = new Long(20);
+
+Long height = new Long(20);
+
+OrdinaryBox box = new OrdinaryBox();
+
+long volume = (Long)Dynamic.call(box, “getVolume”, Long.class, length, Long.class, width, Long.class, height);
+
+
+
+The first argument to call(...) method is the object, the second argument is the method name, and the rest are the arguments to the method preceded by the type of the argument. If we can be assured that the argument objects are not null, we can even infer that type info and unambiguously find a matching method to invoke. Unfortunately, we cannot assume that the arguments would not be null.
+
+You could either browse online or use subversion to checkout the code and use it. To browse go to:
+
+http://jreflection.svn.sourceforge.net/viewvc/jreflection/reflection/Dynamic
+
+Checkout using subversion:
+
+svn co http://jreflection.svn.sourceforge.net/svnroot/jreflection
+
+Or use eclipse with subclipse to import the project into your ide.
+2 Example class:
+
+I used the test sample class OrdinayBox.java that you can find at the sourceforge project. You will find the Junit tests in the Junit Test Case with the project.
+3 Before simplified reflection:
+
+The code is tedious. The syntax is quite unlike direct invocation.
+4 After simplified reflection:
+
+The code is more elegant. The syntax is quite similar to direct invocation.
+5 If we could change the java spec:
+
+We could further improve on the similarity between direct invocation and reflective invocation, if we had control over Java spec. Hopefully the spec guardians will deem this a useful improvement. Following syntax would be desirable.
+
+long volume = (Long)object.dynamic.getVolume(Long.class, length, Long.class, width, Long.class, height);
+
+object in the above case is an instance of OrdinaryBox.
+In fact, since the compiler can figure out the type of the variables at compile time the calling syntax can be improved to:
+
+long volume = (Long)object.dynamic.getVolume( length, width, height);
+To the compiler the possibility that the arguments length, width, height could be null at runtime is moot.
+
+However, the following call will not work:
+
+long volume = (Long)object.dynamic.getVolume( null, width, height);
+
+as we have the same problem of not knowing the type. In order to fix this, the java method calling syntax should be refined to support
+
+long volume = (Long)object.dynamic.getVolume( null(Long.class), width, height);
+
+only for nulls the caller is required to supply the type of the class as an argument to null. Since methods with syntax null(...) are not permitted, the compiler can unambiguously identify this as type specification and use that information to locate the method to call.
+
+In the following section I explain why the syntax should be:
+
+object.dynamic[.provider].getVolume(length, width, height);
+
+where provider is optional and it is an implementation provider of the method getVolume(...);
+
+6 Aspect Oriented concerns:
+
+We can extend simplified reflection to improve some aspect oriented concerns, by extending the reflective invocation in Java.
+
+One of the limitations of AspectJ version 1.5.3 is that a method with a particular name can be introduced by only a single aspect. When you are weaving aspects from different aspect providers, there are situations where multiple aspect providers may provide different implementations for the same interface.
+
+Consider the following interface:
+
+package com.datasaas.introduction;
+
+public interface Externalizable {
+
+void toString();
+
+}
+
+It is not unusual for several implementers to provide an implementation for the Externalizable interface. Currently, aspectJ allows only one implementation to be weaved in. Let us say, we have the following two implementations.
+
+Implementation com.datasaas.A:
+
+Simple textEncoded externalizer.
+
+Implementation com.datadaas.B:
+
+XML externalizer.
+
+A jar X knows of an aspect with implementation com.datasaas.A and uses the toString() implementation from it. A second jar Y developer knows of an aspect with implementation com.datadaas.B and uses the toString() implementation from it. An application that could have used both X and Y jars won’t be able to.
+
+It would be useful to support multiple providers of the same implementation and support invocation that is appropriate.
+
+Using our simplified reflection syntax that extends the java programming language, the developer in jar X would call on the objects that pass through his/her code,
+
+object.dynamic.com.datasaas.A.toString();
+
+The developer in jar Y would call:
+
+object.dynamic.com.datadaas.B.toString();
+In other words:
+
+object.dynamic[.provider].toString();
+
+The above approach should be used even with introducing fields to objects.
+
+Also, you can imagine various permutations in invocation.
+
+object.dynamic.any.toString();
+object.dynamic.all.toString();
+
+and
+
+object.dynamic.toString(); would default to object.dynamic.any.toString();
+Workaraound:
+
+We can workaround the aspectJ limitation by following a naming convention that requires every method and field to be prefixed with the fully qualified classname.
+
+That would in effect result in method names such as com_datadaas_B_toString().
+
+Unfortunately this is ugly, and name collision avoidance is not enforceable.
+7 Varargs limitation:
+
+With varargs in Java at Java 5, it is possible to define the following methods in your class code. (Refer to TestDynamic at “jreflection” project at sourceforge.net)
+
+public Long getTopAreaTwo(Long... argument) {
+
+assert argument.length == 2;
+
+return argument[0].longValue()*argument[1].longValue();
+
+}
+
+public Long getTopAreaTwo(Long arg1, Long... argument) {
+
+assert argument.length == 1;
+
+return arg1.longValue()*argument[0].longValue();
+
+}
+
+Unfortunately, you can’t invoke this method as an invocation cannot happen unambiguously. Even our reflection code fails in disambiguating this. This bug in java is caused because Java did not report this as a compilation error. Our code expends precious cpu cycles at runtime to address this problem. Once java fixes this bug, we could avoid a lot of extra runtime cost.
+8 Performance:
+
+There is an additional performance cost to use simplified reflection because of the varargs bug in java. We iterate over the list of all methods searching for ambiguity in invocation. Once this bug is fixed in Java, we don’t need to guard against ambiguous invocation. If the same code were implemented within Java, they could more efficiently return declared method that is callable for given args. We try to discover this method through an exhaustive search. In java reflection package, they could make this more efficient.
+
+9 Static methods:
+For static methods you would call as follows.
+
+long volume = (Long)Dynamic.callStatic("com.datasaas.sample.OrdinaryBox", “getStaticVolume”, Long.class, length, Long.class, width, Long.class, height);
+
+
+10 Code quality:
+
+I did this as a weekend project. The code while functional could use some refactoring.
+
+Please feel free to comment.
+
+-by
+
+Shankar Narayan

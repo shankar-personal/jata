@@ -1,0 +1,49 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta content="text/html; charset=ISO-8859-1"
+ http-equiv="content-type">
+  <title>Interleaved Args</title>
+</head>
+<body>
+<div style="text-align: center;"><big><big><big><big><span
+ style="font-weight: bold;">Interleaved arguments in a method name.</span></big></big></big></big><br>
+</div>
+<br>
+<h1><a class="mozTocH1" name="mozTocId669553"></a>Introduction:</h1>
+This pattern lets you use interleaved arguments in a method name.<br>
+<br>
+The idea here is to provide a way to use arguments interleaved in the
+method name.<br>
+Ideally, the following call:<br>
+<br>
+<div style="text-align: left;"><span style="font-style: italic;">invoiceLiterate.changeVendor</span><span
+ style="font-style: italic;">AndPriceTo</span><span
+ style="font-style: italic;">("Acme", 100);<br>
+<br>
+</span><span style="font-style: italic;"></span>would actually be:<br>
+&nbsp;&nbsp;&nbsp; &nbsp; <br>
+<span style="font-style: italic;">invoiceLiterate.changeVendorTo("Acme")andPriceTo(100);</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp; <br>
+By interleaving arguments with the method name, the readability is
+dramatically improved.<br>
+The method call reads more like a proper english sentence.<br>
+&nbsp;&nbsp;&nbsp;&nbsp; <br>
+Unfortunately, to support interleaved arguments you need to change the
+language spec. Sadly,<br>
+&nbsp;I am not that powerful.<br>
+&nbsp;&nbsp;&nbsp;&nbsp; <br>
+The following is a poor man's realization of interleaved arguments. It
+has some redundant cluttering code that<br>
+diminishes readability. It is realized using a variation of the Builder
+pattern introduced<br>
+&nbsp;by Joshua Bloch.<br>
+<br>
+&nbsp;<span style="font-style: italic;">invoiceLiterate.callBegin().changeVendorTo("Acme").andPriceTo(100).callEnd();<br>
+<br>
+</span><br>
+</div>
+<h1 style="text-align: left;"><a class="mozTocH1" name="mozTocId614843"></a></h1>
+<br>
+</body>
+</html>

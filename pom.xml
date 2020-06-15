@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+   <modelVersion>4.0.0</modelVersion>
+   <groupId> org.jata</groupId>
+   <artifactId>jata</artifactId>
+   <version> 0.0.1</version>
+   <packaging> pom </packaging>
+   <description></description>
+   <modules>
+        <module> Dynamic </module>
+        <module> jatawrite </module>
+        <module> jatawritetests </module>
+        <module> Setter </module>
+	<!--
+        <module> SampleJataApp </module>
+	-->
+        <module> InterleavedArgs </module>
+   </modules>
+   <build>
+       <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                   <source>1.5</source>
+                   <target>1.5</target>
+                </configuration>
+            </plugin>
+       </plugins>
+   </build>
+</project>

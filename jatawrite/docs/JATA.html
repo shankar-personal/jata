@@ -1,0 +1,754 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta content="text/html; charset=ISO-8859-1"
+ http-equiv="content-type">
+  <title>JATA Concepts</title>
+</head>
+<body>
+<div style="text-align: center;"><big><big><big><big><span
+ style="font-weight: bold;">Jata User Guide<br>
+- Data in Java Syntax<br>
+- Annotation Templates<br>
+</span></big></big></big></big></div>
+<br>
+<ol id="mozToc">
+<!--mozToc h1 1 h2 2 h3 3 h4 4 h5 5 h6 6-->
+  <li><a href="#mozTocId669553">Introduction:</a></li>
+  <li><a href="#mozTocId614843">Jata:</a>
+    <ol>
+      <li><a href="#mozTocId46454">Writing Jata Classes
+from Java objects:</a></li>
+      <li><a href="#mozTocId828710">Data (Object graph)
+Navigability:</a></li>
+      <li><a href="#mozTocId188960">Tooling:</a></li>
+      <li><a href="#mozTocId145318">What does Jata writer
+generate:</a></li>
+      <li><a href="#mozTocId658493">Reading Java objects
+from Jata classes:</a></li>
+      <li><a href="#mozTocId568359">Validation:</a></li>
+    </ol>
+  </li>
+  <li><a href="#mozTocId847980">Annotation templates:</a>
+    <ol>
+      <li><a href="#mozTocId458095">Writing Annotation
+Templates for Java Classes:</a></li>
+      <li><a href="#mozTocId165136">What is generated?</a></li>
+      <li><a href="#mozTocId287896">Reading annotations
+from annotation templates:</a></li>
+      <li><a href="#mozTocId673271">Validation for
+annotation templates:</a></li>
+    </ol>
+  </li>
+  <li><a href="#mozTocId188302">Other languages:</a></li>
+  <li><a href="#mozTocId534551">Known Limitations:</a></li>
+  <li><a href="#mozTocId534552">Future:</a></li>
+  <li><a href="#mozTocId842318">Sources:</a></li>
+</ol>
+<br>
+<h1><a class="mozTocH1" name="mozTocId669553"></a>Introduction:</h1>
+Jata or J(ava)(D)ata is a utility for creating data in a java
+programmer readable/usable Java syntax. By using Jata and annotation
+templates in Jata framework you can
+eliminate the need for XML and property files for runtime configuration
+of applications. You can facilitate runtime
+configurability while needing to know a lot less. Think of Jata as a
+domain specific language for java developers to work with data.
+Developer productivity
+will be improved if a java developer uses Jata framework.<br>
+<br>
+There are numerous data
+representation formats ranging from binary representations such as
+ASN.1 to human readable representations such as property files and XML
+documents. With property files, you sacrifice structure to the data.
+With XML files the readability is debatable. For a Java developer
+reading data in java syntax is easier. When data is expressed using
+Java syntax you do not require the
+developer to know all the equivalent idioms in XML that the developer
+already
+knows in Java. Another use of Jata
+framework is to make it possible for Java developers to use annotations
+for runtime configurability of their software. Systems that need
+runtime configurability have traditionally used XML configuration files
+or
+property files that
+are read and used to affect the runtime program behavior. <br>
+<br>
+Java
+developers have
+started using annotations to influence the program behavior.
+Annotations are an elegant way to affect the program behavior.
+Unfortunately annotations can be used only when the source code is
+available for annotating. Thus far they have not been used to affect
+program behavior at runtime by changing annotations at runtime. With
+Jata framework we make it possible
+for
+runtime configurability of programs using annotation templates.
+Annotation templates help when the configuration is defined around the
+structure of the domain classes (Eg. class, method, fields are the
+basis of configuration). Jata helps when the instances of a class
+contain the information needed to configure runtime behavior of an app.<br>
+<h1><a class="mozTocH1" name="mozTocId614843"></a>Jata:</h1>
+The simplest uses of Jata framework is to take a java object graph and
+write the object graph in Java classes (more preciesely Jata classes)
+that represent the object graph. The generated Jata classes can be
+compiled and they can be used to get back the objects created using
+the Jata framework.<br>
+<h2><a class="mozTocH2" name="mozTocId46454"></a>Writing Jata Classes
+from Java objects:</h2>
+Let us consider the following simple example:<br>
+<br>
+We use the following two classes BoxWithLatch and Latch to demonstrate
+Jata framework's ability to create Jata classes.<br>
+<br>
+<table style="text-align: left; width: 100%;" border="1" cellpadding="2"
+ cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="vertical-align: top;">
+      <pre><font color="#a020f0">package</font> org.jata.write.sample;<br><font
+ color="#0000ff"></font><br><font color="#2e8b57"><b>public</b></font> <font
+ color="#2e8b57"><b>class</b></font> BoxWithLatch  {<br><br>        <font
+ color="#2e8b57"><b>private</b></font> <font color="#2e8b57"><b>int</b></font> width;<br>        <font
+ color="#2e8b57"><b>private</b></font> <font color="#2e8b57"><b>int</b></font> length;<br>        <font
+ color="#2e8b57"><b>private</b></font> <font color="#2e8b57"><b>int</b></font> height;<br>        <font
+ color="#2e8b57"><b>private</b></font> Latch latch;<br><br>        <font
+ color="#2e8b57"><b>public</b></font> BoxWithLatch(<font color="#2e8b57"><b>int</b></font> width, <font
+ color="#2e8b57"><b>int</b></font> length, <font color="#2e8b57"><b>int</b></font> height) {<br>                <font
+ color="#2e8b57"><b>this</b></font>.width = width;<br>                <font
+ color="#2e8b57"><b>this</b></font>.length = length;<br>                <font
+ color="#2e8b57"><b>this</b></font>.height = height;<br>        }<br>       <br>        <font
+ color="#2e8b57"><b>public</b></font> Latch getLatch() {<br>                <font
+ color="#804040"><b>return</b></font> latch;<br>        }<br><br>        <font
+ color="#2e8b57"><b>public</b></font> <font color="#2e8b57"><b>void</b></font> setLatch(Latch latch) {<br>                <font
+ color="#2e8b57"><b>this</b></font>.latch = latch;<br>        }<br><br>        <font
+ color="#2e8b57"><b>public</b></font> <font color="#2e8b57"><b>int</b></font> getHeight() {<br>                <font
+ color="#804040"><b>return</b></font> height;<br>        }<br><br>        <font
+ color="#2e8b57"><b>public</b></font> <font color="#2e8b57"><b>void</b></font> setHeight(<font
+ color="#2e8b57"><b>int</b></font> height) {<br>                <font
+ color="#2e8b57"><b>this</b></font>.height = height;<br>        }<br><br>        <font
+ color="#2e8b57"><b>public</b></font> <font color="#2e8b57"><b>int</b></font> getLength() {<br>                <font
+ color="#804040"><b>return</b></font> length;<br>        }<br><br>        <font
+ color="#2e8b57"><b>public</b></font> <font color="#2e8b57"><b>void</b></font> setLength(<font
+ color="#2e8b57"><b>int</b></font> length) {<br>                <font
+ color="#2e8b57"><b>this</b></font>.length = length;<br>        }<br><br>        <font
+ color="#2e8b57"><b>public</b></font> <font color="#2e8b57"><b>int</b></font> getWidth() {<br>                <font
+ color="#804040"><b>return</b></font> width;<br>        }<br><br>        <font
+ color="#2e8b57"><b>public</b></font> <font color="#2e8b57"><b>void</b></font> setWidth(<font
+ color="#2e8b57"><b>int</b></font> width) {<br>                <font
+ color="#2e8b57"><b>this</b></font>.width = width;<br>        }<br><br>}</pre>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<br>
+<table style="text-align: left; width: 100%;" border="1" cellpadding="2"
+ cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="vertical-align: top;">
+      <pre><font color="#a020f0">package</font> org.jata.write.sample;<br><font
+ color="#0000ff"></font><br><font color="#2e8b57"><b>public</b></font> <font
+ color="#2e8b57"><b>class</b></font> Latch  {<br><br>        <font
+ color="#2e8b57"><b>private</b></font> String name;<br><br>        <font
+ color="#2e8b57"><b>public</b></font> Latch() {<br>        }<br><br>        <font
+ color="#2e8b57"><b>public</b></font> String getName() {<br>                <font
+ color="#804040"><b>return</b></font> name;<br>        }<br><br>        <font
+ color="#2e8b57"><b>public</b></font> <font color="#2e8b57"><b>void</b></font> setName(String name) {<br>                <font
+ color="#2e8b57"><b>this</b></font>.name = name;<br>        }<br><br>}</pre>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<br>
+The following Junit test illustrates how you use the Jata framework to
+write the jata classes. The call <span style="font-family: Arial;">JataWriter.write(box,
+OUTPUT_DIR) </span>writes the Jata classes.<br>
+<br>
+<table style="text-align: left; width: 100%;" border="1" cellpadding="2"
+ cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="vertical-align: top;">
+      <pre><font color="#a020f0">package</font> org.jata.write.tests;<br><br><br><br><font
+ color="#2e8b57"><b>public</b></font> <font color="#2e8b57"><b>class</b></font> TestJataWriterDemo <font
+ color="#2e8b57"><b>extends</b></font> TestCase {<br><br>        <font
+ color="#2e8b57"><b>private</b></font> <font color="#2e8b57"><b>static</b></font> <font
+ color="#2e8b57"><b>final</b></font> String OUTPUT_DIR = <font
+ color="#ff00ff">"C:</font><font color="#6a5acd">\\</font><font
+ color="#ff00ff">temp</font><font color="#6a5acd">\\</font><font
+ color="#ff00ff">writer</font><font color="#6a5acd">\\</font><font
+ color="#ff00ff">"</font>;<br><br>        <font color="#2e8b57"><b>public</b></font> <font
+ color="#2e8b57"><b>void</b></font> testJataWrite()  {<br><br>                BoxWithLatch box = <font
+ color="#804040"><b>new</b></font> BoxWithLatch(<font color="#ff00ff">10</font>, <font
+ color="#ff00ff">20</font>, <font color="#ff00ff">30</font>);<br>                Latch latch = <font
+ color="#804040"><b>new</b></font> Latch();<br>                latch.setName(<font
+ color="#ff00ff">"sealed"</font>);<br>                box.setLatch(latch);<br><br>                JataWriter.write(box, OUTPUT_DIR);<br>        }<br>}</pre>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<br>
+<br>
+The written Jata classes are:<br>
+<br>
+<table style="text-align: left; width: 100%;" border="1" cellpadding="2"
+ cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="vertical-align: top;">
+      <pre><font color="#a020f0">package</font> data.org.jata.write.sample.BoxWithLatch.a;<br><br><font
+ color="#a020f0">@</font><font color="#a020f0">JataUUId</font>(id=<font
+ color="#ff00ff">"UUID-a"</font>)<br><font color="#2e8b57"><b>public</b></font> <font
+ color="#2e8b57"><b>class</b></font> BoxWithLatch {<br><br>           <font
+ color="#2e8b57"><b>public</b></font> <font color="#2e8b57"><b>int</b></font> width = <font
+ color="#ff00ff">10</font>;<br><br>           <font color="#2e8b57"><b>public</b></font> <font
+ color="#2e8b57"><b>int</b></font> length = <font color="#ff00ff">20</font>;<br><br>           <font
+ color="#2e8b57"><b>public</b></font> <font color="#2e8b57"><b>int</b></font> height = <font
+ color="#ff00ff">30</font>;<br><br>           <font color="#2e8b57"><b>public</b></font> org.jata.write.sample.Latch latch =<br>                          data.org.jata.write.sample.Latch.a.Latch.getData();<br><br>           <font
+ color="#2e8b57"><b>public</b></font> <font color="#2e8b57"><b>static</b></font> org.jata.write.sample.BoxWithLatch getData() {<br>                String dataObjectClassName = <br>                   data.org.jata.write.sample.BoxWithLatch.a.BoxWithLatch.<font
+ color="#2e8b57"><b>class</b></font>.getName();<br>                <font
+ color="#804040"><b>return</b></font> (org.jata.write.sample.BoxWithLatch) <br>                  org.jata.write.util.DataObjectUtil.getData(<br>                     dataObjectClassName,org.jata.write.sample.BoxWithLatch.<font
+ color="#2e8b57"><b>class</b></font>.getName());<br>           }<br>}</pre>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<br>
+<table style="text-align: left; width: 100%;" border="1" cellpadding="2"
+ cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="vertical-align: top;">
+      <pre><font color="#a020f0">package</font> data.org.jata.write.sample.Latch.a;<br><br><br><font
+ color="#a020f0">@JataUUId</font>(id=<font color="#ff00ff">"UUID-a"</font>)<br><font
+ color="#2e8b57"><b>public</b></font> <font color="#2e8b57"><b>class</b></font> Latch {<br><br>           <font
+ color="#2e8b57"><b>public</b></font> java.lang.String name = <font
+ color="#ff00ff">"sealed"</font>;<br><br>           <font
+ color="#2e8b57"><b>public</b></font> <font color="#2e8b57"><b>static</b></font> org.jata.write.sample.Latch getData() {<br>                String dataObjectClassName = <br>                   data.org.jata.write.sample.Latch.a.Latch.<font
+ color="#2e8b57"><b>class</b></font>.getName();<br>                <font
+ color="#804040"><b>return</b></font> (org.jata.write.sample.Latch) <br>                   org.jata.write.util.DataObjectUtil.getData(<br>                      dataObjectClassName,<br>                      org.jata.write.sample.Latch.<font
+ color="#2e8b57"><b>class</b></font>.getName());<br>           }<br>}</pre>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<br>
+The generated classes compile successfully. You will notice that each
+Jata class has a <span style="font-family: Arial;">getData()</span>
+method that returns an object. Pay attention to the package name. The
+package name identifies the various Jata classes using a combination of
+the class name info of the java objects that are being written as Jata
+files and runtime sequencers to uniquely identify each object. In
+multiple runs, you could potentially have the same package names. To
+uniquely locate your jata, you need to use the runtime generated uuid..<br>
+<h2><a class="mozTocH2" name="mozTocId828710"></a>Data (Object graph)
+Navigability:</h2>
+When objects have fields that are of primitive types the values are
+assigned in the declared Jata fields corresponding to the fields in the
+java objects. In the above example you will see <br>
+<pre><font color="#2e8b57"><b>public</b></font> <font color="#2e8b57"><b>int</b></font> width = <font
+ color="#ff00ff">10</font>;</pre>
+for the width value. When objects have fields that are references to
+other objects, you will instead see, <br>
+<pre><font color="#2e8b57"><b>public</b></font> org.jata.write.sample.Latch latch =<br>                          data.org.jata.write.sample.Latch.a.Latch.getData();</pre>
+<br>
+If you want to see latch object data, in an IDE such as eclipse, you
+would ctrl click <br>
+<pre>data.org.jata.write.sample.Latch.a.Latch</pre>
+. The getData() methods help in navigating the object graph.<br>
+<h2><a class="mozTocH2" name="mozTocId188960"></a>Tooling:</h2>
+Numerous IDEs exist for working with Java classes. The same IDEs can be
+used to work with the Jata classes. Significant tooling support comes
+for free.<br>
+<h2><a class="mozTocH2" name="mozTocId145318"></a>What does Jata writer
+generate:</h2>
+Jata classes are generated in the jata/src/main/java folder relative to
+the
+output folder.<br>
+<br>
+Each Jata class has a<font color="#a020f0"><span
+ style="font-family: monospace;"> </span>JataUUId</font> annotation
+annotated with a UUID
+that identifies the Jata writer run.<br>
+<br>
+Optionally&nbsp; each Jata class has a <font color="#a020f0"><span
+ style="font-family: monospace;"></span>JataProjectId</font> annotation
+annotated with a prject name
+that identifies the project to which the objects belong to. The user
+supplies the project name when the user calls the JataWriter.<br>
+<br>
+A manifest file jataIdInfo.props is written in the
+jata/src/main/resources directory. The properties in the manifest are:
+jataFQClassName, jataUUIdString, projectName, and jataVersion. The user
+supplies the version info if the user would like to version the data,
+when the user calls JataWriter.<br>
+<br>
+A jataFQClassName (jata fully qualified class name) is one of the
+properties. (The same jataFQClassName may be generated in different
+runs. It is therefore important to use the JataUUId information to
+avoid reading data that you did not intend to. There will be situations
+where you would not care about the jataUUId.<br>
+<br>
+Jata validation classes that are skeletons of the actual classes
+corresponding to the objects that are being written in the
+validation/src/main/java directory.<br>
+<br>
+pom.xml files that define the jata project&nbsp; involving the jata and
+validation files are
+created.<br>
+<br>
+Using an embedded maven builder, the package goal is called at the end
+of the write. Two jar files, {projectName}-jata-{version}.jar
+&amp;&nbsp; projectName}-validation-{version}.jar&nbsp; with all of the
+above generated files and their compiled files in each of the
+appropriate jar files can be found. The jar files reside in the
+jata/target directory and the validation/target directories.<br>
+<br>
+<h2><a class="mozTocH2" name="mozTocId658493"></a>Reading Java objects
+from Jata classes:</h2>
+To read the generated jata files, JataReader provides numerous apis.<br>
+<br>
+JataReader uses app.home environment variable to locate the home
+directory for the application. If app.home environment variable is not
+set, it then uses the current working directory at the time of calling
+the read methods to locate the jata and validation jars.<br>
+<br>
+${app.home}/lib/vld is where you need to copy atleast one of the
+validation jars that includes all of the classes involved in an object
+graph.<br>
+<br>
+${app.home}/lib/jata is where you need to copy all of the jata jars
+that were generated at the time of writing the jata.<br>
+<br>
+In the above example you would call the read method of the JataReader
+as follows.<br>
+<br>
+<span style="font-family: Courier New,Courier,monospace;">BoxWithLatch
+readBox = (BoxWithLatch)JataReader.read(jataFQClassName, projectName,
+versionString, uuidString);</span><br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; <br>
+<br>
+<h2><a class="mozTocH1" name="mozTocId568359"></a>Validation:</h2>
+Jata writer creates skeletons of classes with the structural
+information of the classes. To make jata classes portable, we provide a
+way to package the structural information with the jata classes. Think
+of the validation classes as the XSD or the DTD of an XML file. The
+skeletal structural classes provide a way to not share the actual java
+class code yet provide a way for the Jata classes to be compiled and
+structurally verified. In future, we will develop a way to verify that
+the structural skeletal classes conform to a common strucural skeletal
+class that is available over the network.<br>
+<br>
+Here are some example skeletal classes:<br>
+<br>
+<table style="text-align: left; width: 100%;" border="1" cellpadding="2"
+ cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="vertical-align: top;">
+      <pre><font color="#a020f0">package</font> org.jata.write.sample;<br><br><font
+ color="#2e8b57"><b>public</b></font> <font color="#2e8b57"><b>class</b></font> BoxWithLatch {<br><br>           <font
+ color="#2e8b57"><b>public</b></font> <font color="#2e8b57"><b>int</b></font> width ;<br><br>           <font
+ color="#2e8b57"><b>public</b></font> <font color="#2e8b57"><b>int</b></font> length ;<br><br>           <font
+ color="#2e8b57"><b>public</b></font> <font color="#2e8b57"><b>int</b></font> height ;<br><br>           <font
+ color="#2e8b57"><b>public</b></font> org.jata.write.sample.Latch latch = <font
+ color="#ff00ff">null</font> ;<br><br>}<br></pre>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<br>
+<br>
+<table style="text-align: left; width: 100%;" border="1" cellpadding="2"
+ cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="vertical-align: top;">
+      <pre><font color="#a020f0">package</font> org.jata.write.sample;<br><br><font
+ color="#2e8b57"><b>public</b></font> <font color="#2e8b57"><b>class</b></font> Latch {<br><br>           <font
+ color="#2e8b57"><b>public</b></font> java.lang.String name = <font
+ color="#ff00ff">null</font> ;<br><br>}<br></pre>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<br>
+<h1><a class="mozTocH1" name="mozTocId847980"></a>Annotation templates:</h1>
+Annotation templates are templates of classes. The idea here is to
+annotate an annotation template, just the way you annotate java
+classes. Usually, the class definition sources are not available for
+any body other than the developers that define the class definition.
+Since annotating a class is tightly coupled with the class definition,
+only the authors of the classes can use annotations to alter the
+behavior of an application. If the users of the class need to alter the
+behavior of a program, they have to use configuration files in xml and
+properties files. This is inconvenient for both the designers and users
+of classes.<br>
+<br>
+One significant difference is that with annotation templates is that
+you can have multiple annotation templates for a single class. You can
+annotate each annotation templates differently, and read all or some of
+the annotations from the various annotation templates. The annotation
+templates that are deployed at ${app.home}/lib/jata are processed at
+runtime to be used for effecting the application behavior.<br>
+<br>
+Follow the hypothetical scenario described here. Let us consider the
+above BoxWithLatch class. I am the author of BoxWithLatch. Say I don't
+give out the source code for BoxWithLatch. A user of the BoxWithLatch
+class would like to persist the instances of objects of these classes
+into an rdbms. She would like to use hibernate orm framework for this
+purpose. The user would also like to use a UI framework to create an
+editor for objects of type BoxWithLatch. Let us imagine a fancy UI
+framework that is capable of reading annotations for the fields in the
+BoxWithLatch class and is able to provide an elegant editor for the
+user. Using Jata framework, hibernate and UI framework will be able to
+help the user annotate a template of the BoxWithLatch class where the
+user does not have access to the source code of BoxWithLatch. Even if
+the user had access to the source code, the user is not interested in
+modifying the BoxWithLatch class and take on the consequences of doing
+that. In such situations, Jata annotation templates are a convenient
+solution.<br>
+<br>
+<h2><a class="mozTocH2" name="mozTocId458095"></a>Writing Annotation
+Templates for Java Classes:</h2>
+Annotation template classes can be generated using the following
+snippet of code.<br>
+<div style="margin-left: 40px;"><span
+ style="font-family: Courier New,Courier,monospace;"><br>
+List&lt;Class&lt;?&gt;&gt; annotationClasses = new
+ArrayList&lt;Class&lt;?&gt;&gt;();</span><br
+ style="font-family: Courier New,Courier,monospace;">
+<span style="font-family: Courier New,Courier,monospace;"></span><br>
+<span style="font-family: Courier New,Courier,monospace;"></span><span
+ style="font-family: Courier New,Courier,monospace;">annotationClasses</span><span
+ style="font-family: Courier New,Courier,monospace;">.add(SampleAnnot.class);</span><br>
+<span style="font-family: Courier New,Courier,monospace;"></span><br
+ style="font-family: Courier New,Courier,monospace;">
+<span style="font-family: Courier New,Courier,monospace;"></span><span
+ style="font-family: Courier New,Courier,monospace;">AnnotationTemplateWriter.write(OUTPUT_DIR,
+BoxWithLatch.class.getName(),</span><br
+ style="font-family: Courier New,Courier,monospace;">
+<span style="font-family: Courier New,Courier,monospace;">&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+PROJECT_NAME,&nbsp; versionString, </span><span
+ style="font-family: Courier New,Courier,monospace;">annotationClasses</span><span
+ style="font-family: Courier New,Courier,monospace;">);</span><br>
+<span style="font-family: Courier New,Courier,monospace;"></span></div>
+<span style="font-family: Courier New,Courier,monospace;"><br>
+</span>&nbsp;
+Annotation template classes are generated in the <span
+ style="font-family: Courier New,Courier,monospace;">OUTPUT_DIR/</span>annotations/src/main/java
+folder relative to
+the
+output folder.<br>
+<br>
+<table style="text-align: left; width: 100%;" border="1" cellpadding="2"
+ cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="vertical-align: top;">
+      <pre><font color="#a020f0">package</font> annot.org.jata.write.sample;<br><br><font
+ color="#a020f0">@org</font>.jata.id.JataUUId(id=<font color="#ff00ff">"8cb9e460-1a56-4130-a3ab-9ea0760d8463"</font>)<br><font
+ color="#a020f0">@org</font>.jata.write.ATTypeLevelId(id=<font
+ color="#ff00ff">"DemoJataAnnotTwo"</font>, projectName=<font
+ color="#ff00ff">"DemoJataAnnotTwo"</font>, version=<font
+ color="#ff00ff">"0.0.1"</font>)<br><font color="#2e8b57"><b>public</b></font> <font
+ color="#2e8b57"><b>class</b></font> BoxWithLatch {<br><br>           <font
+ color="#2e8b57"><b>public</b></font> BoxWithLatch () {}<br>           <font
+ color="#2e8b57"><b>public</b></font> <font color="#2e8b57"><b>int</b></font> width ;<br><br>           <font
+ color="#2e8b57"><b>public</b></font> <font color="#2e8b57"><b>int</b></font> length ;<br><br>           <font
+ color="#2e8b57"><b>public</b></font> <font color="#2e8b57"><b>int</b></font> height ;<br><br>           <font
+ color="#2e8b57"><b>public</b></font> annot.org.jata.write.sample.Latch latch = <font
+ color="#ff00ff">null</font> ;<br><br>}<br></pre>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<br>
+<br>
+<br>
+<table style="text-align: left; width: 100%;" border="1" cellpadding="2"
+ cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="vertical-align: top;">
+      <pre><font color="#a020f0">package</font> annot.org.jata.write.sample;<br><br><font
+ color="#a020f0">@org</font>.jata.id.JataUUId(id=<font color="#ff00ff">"8cb9e460-1a56-4130-a3ab-9ea0760d8463"</font>)<br><font
+ color="#a020f0">@org</font>.jata.write.ATTypeLevelId(id=<font
+ color="#ff00ff">"DemoJataAnnotTwo"</font>, projectName=<font
+ color="#ff00ff">"DemoJataAnnotTwo"</font>, version=<font
+ color="#ff00ff">"0.0.1"</font>)<br><font color="#2e8b57"><b>public</b></font> <font
+ color="#2e8b57"><b>class</b></font> Latch {<br><br>           <font
+ color="#2e8b57"><b>public</b></font> Latch () {}<br>           <font
+ color="#2e8b57"><b>public</b></font> java.lang.String name = <font
+ color="#ff00ff">null</font> ;<br><br>}<br></pre>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<br>
+The above two templates are generated. Pay attenttion to the package
+name. It is prefixed with annot to avoid collisions with the actual
+class template that is generated in validation sub project.<br>
+<br>
+A user could annotate the&nbsp; <font color="#2e8b57"><b><span
+ style="font-family: mon;"></span>class</b></font> BoxWithLatch as
+follows.<br>
+<br>
+<table style="text-align: left; width: 100%;" border="1" cellpadding="2"
+ cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="vertical-align: top;">
+      <pre><font color="#a020f0">package</font> annot.org.jata.write.sample;<br><br><font
+ color="#a020f0">@org</font>.jata.id.JataUUId(id=<font color="#ff00ff">"8cb9e460-1a56-4130-a3ab-9ea0760d8463"</font>)<br><font
+ color="#a020f0">@org</font>.jata.write.ATTypeLevelId(id=<font
+ color="#ff00ff">"DemoJataAnnotTwo"</font>, projectName=<font
+ color="#ff00ff">"DemoJataAnnotTwo"</font>, version=<font
+ color="#ff00ff">"0.0.1"</font>)<br><font style="font-weight: bold;"
+ color="#a020f0">@org</font><span style="font-weight: bold;">.jata.write.sample.annot.SampleAnnot(id=</span><font
+ style="font-weight: bold;" color="#ff00ff">"xyz"</font><span
+ style="font-weight: bold;">)</span><br><font color="#2e8b57"><b>public</b></font> <font
+ color="#2e8b57"><b>class</b></font> BoxWithLatch {<br><br>           <font
+ color="#2e8b57"><b>public</b></font> BoxWithLatch () {}<br>           <font
+ color="#2e8b57"><b>public</b></font> <font color="#2e8b57"><b>int</b></font> width ;<br><br>           <font
+ color="#2e8b57"><b>public</b></font> <font color="#2e8b57"><b>int</b></font> length ;<br><br>           <font
+ color="#2e8b57"><b>public</b></font> <font color="#2e8b57"><b>int</b></font> height ;<br><br>           <font
+ color="#2e8b57"><b>public</b></font> annot.org.jata.write.sample.Latch latch = <font
+ color="#ff00ff">null</font> ;<br><br>}<br></pre>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<span style="font-family: monospace;"><br>
+</span>If you edited the annotation templates, for now, you have to
+call mvn package in the OUTPUT_DIR. To read the annotations in your
+app, refer to the section on reading annotations from annotation
+templates.<br>
+<br>
+<span style="font-family: Courier New,Courier,monospace;"></span>
+<h2><a class="mozTocH2" name="mozTocId165136"></a>What is generated?</h2>
+Jata annotation template classes are generated in the
+annotations/src/main/java folder relative to
+the
+output folder.<br>
+<br>
+Each Jata class has a<font color="#a020f0"><span
+ style="font-family: monospace;"> </span>JataUUId</font> annotation
+annotated with a UUID
+that identifies the Jata writer run.<br>
+<br>
+Optionally&nbsp; each Jata class has a <font color="#a020f0"><span
+ style="font-family: monospace;"></span>ATTypeLevelId</font>
+annotation annotated with a prject name
+that identifies the project to which the objects belong to. The user
+supplies the project name when the user calls the JataWriter. This
+annotation includes project name and version info.<br>
+<br>
+A manifest file jataIdInfo.props is written in the
+annotations/src/main/resources
+directory. The properties in the manifest are: jataFQClassName,
+jataUUIdString, projectName, and jataVersion. The user supplies the
+version info if the user would like to version the data, when the user
+calls JataWriter.<br>
+<br>
+A jataFQClassName (jata fully qualified class name) is one of the
+properties. (The same jataFQClassName may be generated in different
+runs. It is therefore important to use the JataUUId information to
+avoid reading data that you did not intend to. There will be situations
+where you would not care about the jataUUId.<br>
+<br>
+Jata validation classes that are skeletons of the actual&nbsp;
+annotation template classes corresponding to the objects that are being
+written in the
+validation/src/main/java directory.<br>
+<br>
+pom.xml files that define the jata project&nbsp; involving the jata and
+validation files are
+created.<br>
+<br>
+Using an embedded maven builder, the package goal is called at the end
+of the write. Two jar files, {projectName}-annotation-{version}.jar
+&amp;&nbsp;
+projectName}-validation-{version}.jar&nbsp; with all of the above
+generated
+files and their compiled files in each of the appropriate jar files can
+be found. The jar files reside in the annotations/target directory and
+the
+validation/target directories.<br>
+<h2><a class="mozTocH2" name="mozTocId287896"></a>Reading annotations
+from annotation templates:</h2>
+To read the generated annotation template files, JataReader provides
+numerous apis.<br>
+<br>
+JataReader uses app.home environment variable to locate the home
+directory for the application. If app.home environment variable is not
+set, it then uses the current working directory at the time of calling
+the read methods to locate the jata and validation jars.<br>
+<br>
+${app.home}/lib/vld is where you need to copy atleast one of the
+validation jars that includes all of the classes involved in an object
+graph.<br>
+<br>
+${app.home}/lib/jata is where you need to copy all of the annotation
+template jars that were generated at the time of writing the annotation
+template classes.<br>
+<br>
+<div style="margin-left: 40px;">
+<div style="margin-left: 40px;"><span
+ style="font-family: Courier New,Courier,monospace;">String uuidString
+= "8cb9e460-1a56-4130-a3ab-9ea0760d8463";</span><br>
+<span style="font-family: Courier New,Courier,monospace;">String
+annotTemplateClassName = org.jata.write.sample.BoxWithLatch.class</span><br>
+<span style="font-family: Courier New,Courier,monospace;">&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; .getName();</span><br>
+<span style="font-family: Courier New,Courier,monospace;"></span><br>
+<span style="font-family: Courier New,Courier,monospace;">String
+versionString = "0.0.1";</span><br>
+<span style="font-family: Courier New,Courier,monospace;">String
+projectName = "";</span><br>
+<span style="font-family: Courier New,Courier,monospace;"></span><br>
+<span style="font-family: Courier New,Courier,monospace;">List&lt;Annotation&gt;
+annotations = JataReader.readAnnotations(</span><br
+ style="font-family: Courier New,Courier,monospace;">
+<span style="font-family: Courier New,Courier,monospace;">&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+SampleAnnot.class, annotTemplateClassName, projectName, versionString,</span><br
+ style="font-family: Courier New,Courier,monospace;">
+<span style="font-family: Courier New,Courier,monospace;">&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+&nbsp;uuidString);</span><br
+ style="font-family: Courier New,Courier,monospace;">
+<span style="font-family: Courier New,Courier,monospace;"></span><span
+ style="font-family: Courier New,Courier,monospace;">SampleAnnot
+sampleAnnotationOne = (SampleAnnot)annotations.get(0);</span><br>
+</div>
+<span style="font-family: Courier New,Courier,monospace;"></span></div>
+<span style="font-family: Courier New,Courier,monospace;"><br>
+</span>The above code gets a specific annotation by uuid. You could do
+the same with projectName.<br>
+<br>
+If you wanted to get all the annotations, you would use the following
+snippet of code.<br>
+<br>
+<span style="font-family: Courier New,Courier,monospace;">&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp; </span><span
+ style="font-family: Courier New,Courier,monospace;">String
+annotTemplateClassName = org.jata.write.sample.BoxWithLatch.class</span><br
+ style="font-family: Courier New,Courier,monospace;">
+<span style="font-family: Courier New,Courier,monospace;">&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; .getName();</span><br
+ style="font-family: Courier New,Courier,monospace;">
+<br style="font-family: Courier New,Courier,monospace;">
+<span style="font-family: Courier New,Courier,monospace;">&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp; String versionString = "0.0.1";</span><br
+ style="font-family: Courier New,Courier,monospace;">
+<span style="font-family: Courier New,Courier,monospace;">&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp; String projectName = "";</span><br
+ style="font-family: Courier New,Courier,monospace;">
+<span style="font-family: Courier New,Courier,monospace;">&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp; List&lt;Annotation&gt; annotations =
+JataReader.readAnnotations(</span><br
+ style="font-family: Courier New,Courier,monospace;">
+<span style="font-family: Courier New,Courier,monospace;">&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+SampleAnnot.class, annotTemplateClassName, projectName, versionString,</span><br
+ style="font-family: Courier New,Courier,monospace;">
+<span style="font-family: Courier New,Courier,monospace;">&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;null);</span><span
+ style="font-family: Courier New,Courier,monospace;"></span><br
+ style="font-family: Courier New,Courier,monospace;">
+<span style="font-family: Courier New,Courier,monospace;">&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp; SampleAnnot sampleAnnotationOne =
+(SampleAnnot)annotations.get(0);</span><br
+ style="font-family: Courier New,Courier,monospace;">
+<span style="font-family: Courier New,Courier,monospace;">&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp; SampleAnnot sampleAnnotationTwo =
+(SampleAnnot)annotations.get(1);</span><br>
+<br>
+Notice how we did not specify the uuId, or projectName. If you want
+field level annotations, you use the same technique for editing the
+annotations. To read you call JataReader.readFieldAnnotations(....). At
+this point we have not turned on method level annotations, as we are
+not generating method skeletons in the annotation template. That is all
+there is to it.<br>
+<h2><a class="mozTocH2" name="mozTocId673271"></a>Validation for
+annotation templates:</h2>
+Even for annotation templates, the validation classes are generated
+exactly in the same way they are generated for Jata output. They also
+include the set of classes included in the annotationClasses collection
+used during the use of JataWriter.<br>
+<br>
+<span style="font-family: Courier New,Courier,monospace;">List&lt;Class&lt;?&gt;&gt;
+annotationClasses = new ArrayList&lt;Class&lt;?&gt;&gt;();</span><br
+ style="font-family: Courier New,Courier,monospace;">
+<span style="font-family: Courier New,Courier,monospace;"></span><br>
+<span style="font-family: Courier New,Courier,monospace;"></span><span
+ style="font-family: Courier New,Courier,monospace;">annotationClasses</span><span
+ style="font-family: Courier New,Courier,monospace;">.add(SampleAnnot.class);</span><br>
+<br>
+They make the generated annotation templates more easy to distribute
+and share as they are fully contained packages.<br>
+<h1><a class="mozTocH1" name="mozTocId188302"></a>Other languages:</h1>
+You can port our code to any OO language and get variants of Jata for
+the users of that particular language.<br>
+<br>
+<h1><a class="mozTocH1" name="mozTocId534551"></a>Known Limitations:</h1>
+Currently we do not support creating Jata classes from immutable
+objects. To provide this support, we need to introduce field level
+annotations that associate constructors and the positional information
+of the parameter. Alternately, we could mandate Builder pattern for all
+immutable objects.
+(http://rwhansen.blogspot.com/2007/07/theres-builder-pattern-that-joshua.html)<br>
+<br>
+<h1><a class="mozTocH1" name="mozTocId534552"></a>Future:</h1>
+<br>
+Simplify auto generation MOF equivalent XML from instances of objects
+read from Jata files, and conversely read XML files and write Jata
+projects to co-exist with XML.<br>
+<br>
+Add upgrade capabilities to help upgrade jata files and annotation
+templates as the underlying classes evolve.<br>
+<br>
+UI driven tools for generating annotation templates, with IDE
+integration.<br>
+<br>
+UI driven tools for generating jata, with IDE
+integration.<br>
+<br>
+Make the reference implementation robust. Any one interested in helping
+out, send me an email from the jata sourceforge project
+narashankar@users.sourceforge.net.<br>
+<br>
+Programmatically disable compiling the created jata. Create a separate
+reader project, make the reader lighter weight.<br>
+<br>
+Let the user annotate the classes as they currently do, but our
+framework should extract this and write out this information in the
+annotation template. <br>
+<br>
+When multiple annotation templates exist, and different subsytems
+unbenknownst to each other redfine the annotations, we need to specify
+a precedency order when the user tries to read annotations by project
+name instead of uuid.<br>
+<br>
+<h1><a class="mozTocH1" name="mozTocId842318"></a>Sources:</h1>
+<p class="MsoNormal">You could either browse online or use subversion
+to checkout the code and use it. To browse go to:</p>
+<p class="MsoNormal"><a
+ href="http://jreflection.svn.sourceforge.net/viewvc/jreflection/reflection/Dynamic/">http://jata.svn.sourceforge.net/viewvc/jata</a></p>
+<p class="MsoNormal"><span style="font-size: 100%;"><span
+ style="font-weight: normal;">Checkout using subversion:</span></span></p>
+<p class="MsoNormal"><span style="font-size: 100%;"><span
+ style="font-weight: normal;"> svn co
+http://jata.svn.sourceforge.net/svnroot/jata<br>
+</span></span></p>
+<span style="font-size: 100%;"><span style="font-weight: normal;">Or
+use eclipse with subclipse to import the projects into your ide.</span></span><br>
+<br>
+If you are interested in pitching in for this project, please do
+contact me narashankar@users.sourceforge.net.<br>
+<br>
+</body>
+</html>
